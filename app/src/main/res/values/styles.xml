@@ -1,0 +1,20 @@
+<resources>
+    <!-- TextView Style -->
+    <style name="CommonTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- Button Style -->
+    <style name="CommonButton">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- TextInputLayout Style -->
+    <style name="CommonTextInputLayout">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+</resources>

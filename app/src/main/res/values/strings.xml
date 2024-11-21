@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MyApplication</string>
+    <string name="get_started">Get Started</string>
+    <string name="create_account">by creating a free account</string>
+    <string name="full_name_hint">Full Name</string>
+    <string name="email_hint">Enter your email</string>
+    <string name="phone_number_hint">Phone Number</string>
+    <string name="password_hint">Password</string>
+    <string name="terms_text">By checking the box you agree to our terms and conditions</string>
+    <string name="next_button">Next</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="sign_in">Sign in to access your account</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="new_member">New Member?</string>
+    <string name="register_now">Register Now</string>
+    <string name="already_member">Already a member?</string>
+    <string name="login_now">Log In Now</string>
+</resources>

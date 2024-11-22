@@ -4,7 +4,7 @@ import org.junit.Test
 
 class CredentialsManagerTest {
 
-    private val credentialsManager = CredentialsManager()
+    private val credentialsManager = CredentialsManager
 
     @Test
     fun testValidEmail() {

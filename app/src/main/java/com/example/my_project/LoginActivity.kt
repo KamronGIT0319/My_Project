@@ -2,99 +2,63 @@ package com.example.my_project
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.TextView
-import android.widget.Toast
+import android.util.Patterns
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.TextInputEditText
 
 class LoginActivity : AppCompatActivity() {
-    private val credentialsManager = CredentialsManager
 
-    private val emailField: TextInputEditText
-        get() = findViewById(R.id.etEmail)
-
-    private val emailLayout: TextInputLayout
-        get() = findViewById(R.id.textInputEmail)
-
-    private val passwordField: TextInputEditText
-        get() = findViewById(R.id.etPassword)
-
-    private val passwordLayout: TextInputLayout
-        get() = findViewById(R.id.textInputPassword)
-
-    private val nextButton: Button
-        get() = findViewById(R.id.btnNext)
-
-    private val rememberMeCheckbox: CheckBox
-        get() = findViewById(R.id.cbRememberMe)
+    private val emailInputLayout: TextInputLayout by lazy { findViewById<TextInputLayout>(R.id.emailInputLayout) }
+    private val passwordInputLayout: TextInputLayout by lazy { findViewById<TextInputLayout>(R.id.passwordInputLayout) }
+    private val emailEditText: TextInputEditText by lazy { findViewById<TextInputEditText>(R.id.editEmail) }
+    private val passwordEditText: TextInputEditText by lazy { findViewById<TextInputEditText>(R.id.editPassword) }
+    private val nextButton: MaterialButton by lazy { findViewById<MaterialButton>(R.id.next_button) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
 
-        nextButton.setOnClickListener { handleNextButtonClick() }
-        val loginButton = findViewById<TextView>(R.id.tvRegisterNoww)
-        loginButton.setOnClickListener {
-            val goToReg = Intent(this, RegisterActivity::class.java)
-            startActivity(goToReg)
+        nextButton.setOnClickListener {
+            validateCredentials()
         }
     }
 
-    private fun handleNextButtonClick() {
-        val email = emailField.text.toString().trim()
-        val password = passwordField.text.toString().trim()
-        val isRememberMeChecked = rememberMeCheckbox.isChecked
-        if (credentialsManager.isHardcodedCredentials(email, password)) {
-            navigateToMainActivity()
-            return
-        }
-        when {
-            email.isEmpty() -> setError(emailLayout, getString(R.string.error_email_required))
-            !credentialsManager.isEmailValid(email) -> setError(
-                emailLayout,
-                getString(R.string.error_invalid_email)
-            )
+    private fun validateCredentials() {
+        val email = emailEditText.text.toString()
+        val password = passwordEditText.text.toString()
 
-            password.isEmpty() -> setError(
-                passwordLayout,
-                getString(R.string.error_password_required)
-            )
+        val isEmailValid = validateEmail(email)
+        val isPasswordValid = validatePassword(password)
 
-            !credentialsManager.isValidPassword(password) -> setError(
-                passwordLayout,
-                getString(R.string.error_password_invalid)
-            )
-
-            !isRememberMeChecked -> showToast(getString(R.string.error_remember_me_required))
-
-            credentialsManager.validateCredentials(email, password, isRememberMeChecked) -> {
-                showToast(getString(R.string.success_signed_in))
-            }
-
-            else -> showToast(getString(R.string.error_invalid_credentials))
+        if (isEmailValid && isPasswordValid && email == "test@te.st" && password == "1234") {
+            // Move to MainActivity
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
-    private fun setError(layout: TextInputLayout, message: String) {
-        layout.error = message
+    private fun validateEmail(email: String): Boolean {
+        return if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailInputLayout.error = "Invalid email"
+            false
+        } else {
+            emailInputLayout.error = null
+            true
+        }
     }
 
-    private fun clearError(layout: TextInputLayout) {
-        layout.error = null
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun navigateToMainActivity() {
-        clearError(emailLayout)
-        clearError(passwordLayout)
-        showToast(getString(R.string.success_signed_in))
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+    private fun validatePassword(password: String): Boolean {
+        return if (password.isEmpty()) {
+            passwordInputLayout.error = "Password cannot be empty"
+            false
+        } else {
+            passwordInputLayout.error = null
+            true
+        }
     }
 }
+

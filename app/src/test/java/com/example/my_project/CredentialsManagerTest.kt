@@ -1,125 +1,69 @@
-import com.example.my_project.CredentialsManager
+// Put your package name here. Check your activity for reference.
+package com.example.my_project
+
 import org.junit.Assert.*
 import org.junit.Test
 
 class CredentialsManagerTest {
 
-    private val credentialsManager = CredentialsManager
-
+    // Test empty email
     @Test
-    fun testValidEmail() {
-        assertTrue(credentialsManager.isEmailValid("example@test.com"))
-        assertFalse(credentialsManager.isEmailValid("invalid-email"))
+    fun givenEmptyEmail_thenReturnFalse() {
+        val credentialsManager = CredentialsManager()
+        val email=""
+        val isEmailValid = credentialsManager.isEmailValid(email)
+
+        assertEquals(false, isEmailValid)
     }
 
+    // Test proper email
     @Test
-    fun testValidPassword() {
-        assertTrue(credentialsManager.isValidPassword("password123"))
-        assertFalse(credentialsManager.isValidPassword("short"))
+    fun givenCorrectEmail_thenReturnTrue(){
+        val credentialsManager=CredentialsManager()
+        val email="myname@gmail.com"
+
+        assertEquals(true, credentialsManager.isEmailValid(email))
     }
 
+    // Test wrong email format
     @Test
-    fun testEmailAlreadyUsed() {
-        credentialsManager.registerUser("test@test.com")
+    fun givenWrongEmailFormat_thenReturnFalse(){
+        val credentialsManager=CredentialsManager()
+        val email="absolutelyanemail"
 
-        assertTrue(credentialsManager.isEmailAlreadyUsed("test@test.com"))
-        assertTrue(credentialsManager.isEmailAlreadyUsed("TEST@TEST.COM"))
-        assertFalse(credentialsManager.isEmailAlreadyUsed("new@test.com"))
+        assertEquals(false, credentialsManager.isEmailValid(email))
     }
 
+    // Test empty password
+
     @Test
-    fun testValidateCredentials() {
-        // Valid email, password, and checkbox checked
-        assertTrue(credentialsManager.validateCredentials("example@test.com", "password123", true))
+    fun givenEmptyPassword_thenReturnFalse() {
+        val credentialsManager = CredentialsManager()
+        val password = ""
+        val isPasswordValid = credentialsManager.isPasswordValid(password)
 
-        // Invalid email
-        assertFalse(credentialsManager.validateCredentials("invalid-email", "password123", true))
-
-        // Invalid password
-        assertFalse(credentialsManager.validateCredentials("example@test.com", "short", true))
-
-        // Checkbox not checked
-        assertFalse(
-            credentialsManager.validateCredentials(
-                "example@test.com",
-                "password123",
-                false
-            )
-        )
+        assertEquals(false, isPasswordValid)
     }
 
+    // Test filled password
+
     @Test
-    fun testValidFullName() {
-        assertTrue(credentialsManager.isValidFullName("John Doe"))
-        assertFalse(credentialsManager.isValidFullName(""))
-        assertTrue(credentialsManager.isValidFullName("John"))
+    fun givenStrongPassword_thenReturnTrue() {
+        val credentialsManager = CredentialsManager()
+        val password = "StrongPassword123!"
+        val isPasswordValid = credentialsManager.isPasswordValid(password)
+
+        assertEquals(true, isPasswordValid)
     }
 
-    @Test
-    fun testValidPhoneNumber() {
-        assertTrue(credentialsManager.isValidPhoneNumber("1234567890"))
-        assertFalse(credentialsManager.isValidPhoneNumber("12345"))
-        assertFalse(credentialsManager.isValidPhoneNumber(""))
-    }
+    // Test weak password (e.g., too short or missing criteria)
 
     @Test
-    fun testTermsAccepted() {
-        assertFalse(credentialsManager.isTermsAccepted(false))
-    }
+    fun givenWeakPassword_thenReturnFalse() {
+        val credentialsManager = CredentialsManager()
+        val password = "weak"
+        val isPasswordValid = credentialsManager.isPasswordValid(password)
 
-    @Test
-    fun testValidateCredentialsForSignUp() {
-        // Valid full name, email, phone, password, and checkbox checked
-        assertTrue(
-            credentialsManager.ValidateCredentialsForSignUp(
-                "John Doe", "example@test.com", "1234567890", "password123", true
-            )
-        )
-
-        // Invalid full name
-        assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
-                "", "example@test.com", "1234567890", "password123", true
-            )
-        )
-
-        // Invalid email
-        assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
-                "John Doe", "invalid-email", "1234567890", "password123", true
-            )
-        )
-
-        // Invalid phone number
-        assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
-                "John Doe", "example@test.com", "12345", "password123", true
-            )
-        )
-
-        // Invalid password
-        assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
-                "John Doe", "example@test.com", "1234567890", "short", true
-            )
-        )
-
-        // Checkbox not checked
-        assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
-                "John Doe", "example@test.com", "1234567890", "password123", false
-            )
-        )
-    }
-
-    @Test
-    fun testHardcodedLoginCredentials() {
-        val validEmail = "test@te.st"
-        val validPassword = "1234"
-
-        assertTrue(validEmail == "test@te.st" && validPassword == "1234")
-
-        assertFalse(validEmail == "wrong@te.st" && validPassword == "1234")
-        assertFalse(validEmail == "test@te.st" && validPassword == "wrong")
+        assertEquals(false, isPasswordValid)
     }
 }

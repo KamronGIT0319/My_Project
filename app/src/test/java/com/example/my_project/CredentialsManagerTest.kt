@@ -19,33 +19,15 @@ class CredentialsManagerTest {
     }
 
     @Test
-    fun testEmailAlreadyUsed() {
-        credentialsManager.registerUser("test@test.com")
-
-        assertTrue(credentialsManager.isEmailAlreadyUsed("test@test.com"))
-        assertTrue(credentialsManager.isEmailAlreadyUsed("TEST@TEST.COM"))
-        assertFalse(credentialsManager.isEmailAlreadyUsed("new@test.com"))
-    }
-
-    @Test
     fun testValidateCredentials() {
-        // Valid email, password, and checkbox checked
-        assertTrue(credentialsManager.validateCredentials("example@test.com", "password123", true))
+        // Valid email, password
+        assertTrue(credentialsManager.validateCredentials("example@test.com", "password123"))
 
         // Invalid email
-        assertFalse(credentialsManager.validateCredentials("invalid-email", "password123", true))
+        assertFalse(credentialsManager.validateCredentials("invalid-email", "password123"))
 
         // Invalid password
-        assertFalse(credentialsManager.validateCredentials("example@test.com", "short", true))
-
-        // Checkbox not checked
-        assertFalse(
-            credentialsManager.validateCredentials(
-                "example@test.com",
-                "password123",
-                false
-            )
-        )
+        assertFalse(credentialsManager.validateCredentials("example@test.com", "short"))
     }
 
     @Test
@@ -63,50 +45,45 @@ class CredentialsManagerTest {
     }
 
     @Test
-    fun testTermsAccepted() {
-        assertFalse(credentialsManager.isTermsAccepted(false))
-    }
-
-    @Test
     fun testValidateCredentialsForSignUp() {
         // Valid full name, email, phone, password, and checkbox checked
         assertTrue(
-            credentialsManager.ValidateCredentialsForSignUp(
+            credentialsManager.validateCredentialsForSignUp(
                 "John Doe", "example@test.com", "1234567890", "password123", true
             )
         )
 
         // Invalid full name
         assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
+            credentialsManager.validateCredentialsForSignUp(
                 "", "example@test.com", "1234567890", "password123", true
             )
         )
 
         // Invalid email
         assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
+            credentialsManager.validateCredentialsForSignUp(
                 "John Doe", "invalid-email", "1234567890", "password123", true
             )
         )
 
         // Invalid phone number
         assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
+            credentialsManager.validateCredentialsForSignUp(
                 "John Doe", "example@test.com", "12345", "password123", true
             )
         )
 
         // Invalid password
         assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
+            credentialsManager.validateCredentialsForSignUp(
                 "John Doe", "example@test.com", "1234567890", "short", true
             )
         )
 
         // Checkbox not checked
         assertFalse(
-            credentialsManager.ValidateCredentialsForSignUp(
+            credentialsManager.validateCredentialsForSignUp(
                 "John Doe", "example@test.com", "1234567890", "password123", false
             )
         )
@@ -121,5 +98,36 @@ class CredentialsManagerTest {
 
         assertFalse(validEmail == "wrong@te.st" && validPassword == "1234")
         assertFalse(validEmail == "test@te.st" && validPassword == "wrong")
+    }
+
+    @Test
+    fun testRegisterUser() {
+        val email = "newuser@test.com"
+        val password = "strongPassword123"
+
+        assertTrue(credentialsManager.registerUser(email, password))
+        assertFalse(credentialsManager.registerUser(email, password))
+        assertTrue(credentialsManager.isEmailAlreadyUsed(email))
+    }
+
+    @Test
+    fun testValidateLogin() {
+        val email = "user@test.com"
+        val password = "securePassword123"
+
+        // 1. Register a user
+        credentialsManager.registerUser(email, password)
+
+        // 2. Valid login
+        assertTrue(credentialsManager.validateLogin(email, password))
+
+        // 3. Invalid login (wrong password)
+        assertFalse(credentialsManager.validateLogin(email, "wrongPassword"))
+
+        // 4. Invalid login (non-existent email)
+        assertFalse(credentialsManager.validateLogin("nonexistent@test.com", password))
+
+        // 5. Email lookup should be case insensitive
+        assertTrue(credentialsManager.validateLogin("USER@test.COM", password))
     }
 }

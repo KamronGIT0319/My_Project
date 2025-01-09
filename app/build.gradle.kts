@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragments)
     testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.8.21")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

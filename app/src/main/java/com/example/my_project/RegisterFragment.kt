@@ -9,9 +9,9 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.my_project.CredentialsManager
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+
 
 class SignUpDetailsFragment : Fragment() {
 
